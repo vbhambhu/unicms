@@ -1,0 +1,23 @@
+<h3>Add new Post</h3>
+<form th:action="@{/admin/posts/new}" method="post" enctype="multipart/form-data" th:object="${post}">
+<div><label> Title : <input type="text" name="title"/> </label></div>
+<div><label> SEO URL : <input type="text" name="name"/> </label></div>
+<div><label> Content: <textarea name="content"></textarea></label></div>
+<div><label> Image : <input type="file" name="image"/> </label></div>
+<div>
+<select name="status">
+  <option value="true">Publish</option>
+  <option value="false">Draft</option>
+</select>
+</div>
+
+
+<select multiple="multiple" name="categories">
+  <option value="volvo">Volvo</option>
+  <option value="saab">Saab</option>
+  <option value="opel">Opel</option>
+  <option value="audi">Audi</option>
+</select>
+
+<div><input type="submit" value="Create"/></div>
+</form>

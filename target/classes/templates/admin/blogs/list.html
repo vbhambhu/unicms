@@ -1,0 +1,14 @@
+<h3>All Posts</h3>
+
+<table border="1">
+
+<tr th:each="post : ${posts}">
+    <td th:text="${post.id}">1</td>
+    <td th:text="${post.title}">Text ...</td>
+    <td th:text="${post.content}">Text ...</td>
+    <td><a th:href="@{/admin/posts/edit(id=${post.id})}">Edit</a></td>
+    <td><a th:href="@{/admin/posts/delete(id=${post.id})}">Delete</a></td>
+</tr>
+
+</table>
+<a th:href="@{/admin/posts/new}">New Post</a>
