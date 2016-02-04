@@ -1,1 +1,10 @@
-<a href="/admin/users/new">Add new user</a>
+<h3>All Users</h3>
+<a th:href="@{/admin/users/new}">Add new user</a>
+<table border="1">
+<tr th:each="user : ${users}">
+    <td th:text="${user.username}">1</td>
+    <td th:text="${user.username}">Text ...</td>
+    <td th:text="${user.email}">Text ...</td>
+    <td><a th:href="@{/admin/users/edit(id=${user.username})}">Edit</a></td>
+</tr>
+</table>

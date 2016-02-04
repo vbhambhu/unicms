@@ -25,15 +25,18 @@ public class AdminUserController {
 	
 	@RequestMapping(value="/admin/users", method=RequestMethod.GET)
     public String showUser(User user, Model model) {
-		
-		model.addAttribute("users", userService.findAll());
-		
+		model.addAttribute("users", userService.listUser());
         return "admin/users/list";
     }
 	
 	
 	@RequestMapping(value="/admin/users/new", method=RequestMethod.GET)
     public String addUser(User user, Model model) {
+		
+		
+		java.util.List<Object> fff = userService.listRoles(); 
+		
+		System.out.print(fff.username);
 		
 		HashMap<String, String> roles = new HashMap<String, String>();
 		roles.put("1", "SuperAdmin");

@@ -5,6 +5,16 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class User {
+	
+	private String id;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	@Size(min=2, max=30)
     private String username;
