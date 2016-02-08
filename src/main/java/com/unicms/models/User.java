@@ -1,33 +1,61 @@
-package com.unicms.admin.controllers;
+package com.unicms.models;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+
 public class User {
 	
-	private String id;
+	private int id;
 
-	public String getId() {
+	@Size(min=6, max=30)
+    private String username;
+	
+	@Size(min=6, max=30)
+	private String password;
+	
+	@ValidEmail
+	private String email;
+	
+	private String firstName;
+	private String lastName;
+	private String fullName;
+	private boolean status;
+	private String created_at;
+	
+	//role
+	private int roleId;
+	private String roleName;
+	
+	
+	//getters and setters
+	
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String firstName, String lastName) {
+		this.fullName = firstName + ' ' +lastName;
+	}
+	
+	public String getCreated_at() {
+		return created_at;
+	}
+
+	public void setCreated_at(String created_at) {
+		this.created_at = created_at;
+	}
+
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
-
-	@Size(min=2, max=30)
-    private String username;
-	
-	@Size(min=2, max=30)
-	private String password;
-	
-	private String email;
-	private String firstName;
-	private String lastName;
-	private int roleId;
-	private String role;
-	private boolean status;
 
 	
 	public String getEmail() {
@@ -62,12 +90,17 @@ public class User {
 		this.roleId = roleId;
 	}
 
-	public String getRole() {
-		return role;
+	
+	public String getRoleName() {
+		return roleName;
 	}
 
-	public void setRole(String role) {
-		this.role = role;
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 	public boolean isStatus() {
@@ -76,6 +109,10 @@ public class User {
 
 	public void setStatus(boolean status) {
 		this.status = status;
+	}
+	
+	public boolean getStatus() {
+		return status;
 	}
 
 	public String getUsername() {

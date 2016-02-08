@@ -1,4 +1,4 @@
-package com.unicms.admin.controllers;
+package com.unicms.controllers;
 
 import java.util.HashMap;
 
@@ -10,9 +10,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.unicms.models.User;
+import com.unicms.services.UserService;
 
 import groovyjarjarantlr.collections.List;
 
@@ -23,57 +27,63 @@ public class AdminUserController {
 	UserService userService;
 	
 	
-	@RequestMapping(value="/admin/users", method=RequestMethod.GET)
+	@RequestMapping(value="/admin/user", method=RequestMethod.GET)
     public String showUser(User user, Model model) {
 		model.addAttribute("users", userService.listUser());
         return "admin/users/list";
     }
 	
 	
-	@RequestMapping(value="/admin/users/new", method=RequestMethod.GET)
+	@RequestMapping(value="/admin/user/new", method=RequestMethod.GET)
     public String addUser(User user, Model model) {
 		
-		
-		java.util.List<Object> fff = userService.listRoles(); 
-		
-		System.out.print(fff.username);
-		
-		HashMap<String, String> roles = new HashMap<String, String>();
-		roles.put("1", "SuperAdmin");
-		roles.put("2", "Editior");
-		model.addAttribute("roles", roles);
-		
+		model.addAttribute("roles", userService.listRoles());
         return "admin/users/add";
     }
 	
 	
 
 	 
-	@RequestMapping(value="/admin/users/new", method=RequestMethod.POST)
+	@RequestMapping(value="/admin/user/new", method=RequestMethod.POST)
 	public String insertUser(@Valid User user, BindingResult bindingResult, Model model) {
 		
+		model.addAttribute("roles", userService.listRoles());
+		
 		if (bindingResult.hasErrors()) {
-			
-			HashMap<String, String> roles = new HashMap<String, String>();
-			roles.put("1", "SuperAdmin");
-			roles.put("2", "Editior");
-			model.addAttribute("roles", roles);
-			
-			 return "admin/users/add";
+			return "admin/users/add";
+        }
+		
+		if( userService.emailExists( user.getEmail() ) ){
+			bindingResult.rejectValue("email", "error.user", "An account already exists for this email.");
+		}
+		
+		if( userService.usernameExists( user.getUsername() ) ){
+			bindingResult.rejectValue("username", "error.user", "An account already exists with this username.");
+		}
+		
+		if (bindingResult.hasErrors()) {
+			return "admin/users/add";
         }
 		
 		
 		
+		//Create new user
+		userService.createUser(user);
 		
-		//System.out.println(categories);
+		return "redirect:/admin/user";
+    }
+	
+	
+	@RequestMapping(value="/admin/user/edit", method=RequestMethod.GET)
+	public String editPost(@RequestParam("id") int id, Model model) {
 		
+		User user = userService.getUserById( id );
 		
-		//String fileName = image.getOriginalFilename();
-
-//		SecureRandom random = new SecureRandom();
-//		String imageName = new BigInteger(130, random).toString(32)+".jpg";
-//		postJDBCTemplate.create(post.getTitle(), post.getName(), post.getContent(), imageName , post.getStatus());
-        return "redirect:/admin/posts";
+		model.addAttribute("user", user); 
+		
+		model.addAttribute("roles", userService.listRoles());
+		
+		return "admin/users/edit";
     }
 	
 	/*
@@ -84,14 +94,7 @@ public class AdminUserController {
         return "admin/posts/edit";
     }
 	
-	@RequestMapping(value="/admin/posts/edit", method=RequestMethod.POST)
-	public String editPost(@RequestParam("id") int id,
-			@RequestParam("title") String title, 
-			@RequestParam("content") String content) {
-
-		//postJDBCTemplate.update(id, title, content);
-        return "redirect:/admin/posts";
-    }
+	
 	
 	
 	@RequestMapping(value="/admin/posts/delete", method=RequestMethod.GET)

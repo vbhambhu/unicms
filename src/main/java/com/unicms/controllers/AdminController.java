@@ -1,4 +1,4 @@
-package com.unicms.admin.controllers;
+package com.unicms.controllers;
 
 import javax.validation.Valid;
 
@@ -8,6 +8,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.unicms.models.User;
 
 import groovyjarjarantlr.collections.List;
 

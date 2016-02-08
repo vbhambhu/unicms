@@ -2,7 +2,7 @@
     <body>
     
 
-        <form action="#" th:action="@{/admin/users/new}" th:object="${user}" method="post">
+        <form action="#" th:action="@{/admin/user/new}" th:object="${user}" method="post">
             <table>
                 <tr>
                     <td>Username*:</td>
@@ -32,11 +32,11 @@
                  <tr>
                     <td>Role:</td>
                     <td>
-                    <select th:field="*{role}" >
-            			<option th:each="role : ${roles}" th:value="${role.key}"  th:text="${role.value}">Options</option>
+                    <select th:field="*{roleId}">
+            			<option th:each="role : ${roles}" th:value="${role.roleId}"  th:text="${role.roleName}">Options</option>
         			</select>
         			</td>
-                    <td th:if="${#fields.hasErrors('role')}" th:errors="*{role}">Name Error</td>
+                    <td th:if="${#fields.hasErrors('roleName')}" th:errors="*{roleName}">Name Error</td>
                 </tr>
                 <tr>
                     <td><button type="submit">Submit</button></td>
