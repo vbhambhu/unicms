@@ -27,6 +27,13 @@ public class AdminUserController {
 	UserService userService;
 	
 	
+	@RequestMapping(value="/admin/user/list", method=RequestMethod.GET)
+    public String showUserDT(User user, Model model) {
+		model.addAttribute("users", userService.listUser());
+        return "admin/users/listdt";
+    }
+	
+	
 	@RequestMapping(value="/admin/user", method=RequestMethod.GET)
     public String showUser(User user, Model model) {
 		model.addAttribute("users", userService.listUser());
@@ -35,7 +42,7 @@ public class AdminUserController {
 	
 	
 	@RequestMapping(value="/admin/user/new", method=RequestMethod.GET)
-    public String addUser(User user, Model model) {
+    public String insertUser(User user, Model model) {
 		
 		model.addAttribute("roles", userService.listRoles());
         return "admin/users/add";
@@ -75,28 +82,45 @@ public class AdminUserController {
 	
 	
 	@RequestMapping(value="/admin/user/edit", method=RequestMethod.GET)
-	public String editPost(@RequestParam("id") int id, Model model) {
+	public String editUser(@RequestParam("id") int id, Model model) {
 		
 		User user = userService.getUserById( id );
-		
 		model.addAttribute("user", user); 
-		
 		model.addAttribute("roles", userService.listRoles());
+		return "admin/users/edit";
+    }
+	
+	
+	@RequestMapping(value="/admin/user/edit", method=RequestMethod.POST)
+	public String editUser(@Valid User user, BindingResult bindingResult, Model model) {
+		
+		//User user = userService.getUserById( id );
+		model.addAttribute("user", user); 
+		model.addAttribute("roles", userService.listRoles());
+		
+		
+		if (bindingResult.hasErrors()) {
+			return "admin/users/edit?id="+user.getId();
+        }
+		
+		if( userService.emailExists( user.getEmail() ) ){
+			bindingResult.rejectValue("email", "error.user", "An account already exists for this email.");
+		}
+		
+		if( userService.usernameExists( user.getUsername() ) ){
+			bindingResult.rejectValue("username", "error.user", "An account already exists with this username.");
+		}
+		
+		if (bindingResult.hasErrors()) {
+			return "admin/users/add";
+        }
+		
+		
 		
 		return "admin/users/edit";
     }
 	
 	/*
-	@RequestMapping(value="/admin/posts/edit", method=RequestMethod.GET)
-    public String editForm(@RequestParam("id") int id, Model model) {
-	 Post post = postJDBCTemplate.getPost( id );
-	 model.addAttribute("post", post); 
-        return "admin/posts/edit";
-    }
-	
-	
-	
-	
 	@RequestMapping(value="/admin/posts/delete", method=RequestMethod.GET)
     public String deletePost(@RequestParam("id") int id) {
 	

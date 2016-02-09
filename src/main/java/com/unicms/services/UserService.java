@@ -101,7 +101,7 @@ public class UserService {
 		
 		//String SQL = "SELECT * from users where id = ?";
 		
-		String SQL = "SELECT u.id,u.username,u.email,u.first_name,u.last_name,u.status,u.created_at,ur.role_name FROM users u LEFT JOIN user_roles ur ON (u.role_id = ur.role_id) WHERE u.id= ?";
+		String SQL = "SELECT u.id,u.username,u.email,u.first_name,u.last_name,u.status,u.created_at,ur.role_id, ur.role_name FROM users u LEFT JOIN user_roles ur ON (u.role_id = ur.role_id) WHERE u.id= ?";
 		
 		User user = jdbcTemplate.queryForObject(SQL, new Object[]{id}, new BeanPropertyRowMapper<User>(User.class) );
 		return user;
