@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.unicms.models.User;
 import com.unicms.services.PostService;
 
 import groovyjarjarantlr.collections.List;
@@ -21,6 +22,8 @@ public class AdminBlogController {
 	@Autowired
 	PostService postService;
 	
+	
+	@RequestMapping(value="/admin/post", method=RequestMethod.GET)
 	public String showPosts(Model model) {
 		model.addAttribute("posts", postService.findAll() );
         return "admin/posts/list";
