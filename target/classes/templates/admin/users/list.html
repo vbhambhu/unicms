@@ -9,6 +9,7 @@
 <th>Status</th>
 <th>Created at</th>
 <th>Edit</th>
+<th>Delete</th>
 </tr>
 
 <tr th:each="user : ${users}">
@@ -19,5 +20,40 @@
     <td th:text="${user.status}">Text ...</td>
     <td th:text="${user.created_at}">Text ...</td>
     <td><a th:href="@{/admin/user/edit(id=${user.id})}">Edit</a></td>
+    <td><a th:href="@{/admin/user/delete(id=${user.id})}">Delete</a></td>
 </tr>
 </table>
+
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class='pagination pagination-centered'>
+            <ul class="pagination">
+                <li th:class="${currentIndex == 1}? 'disabled' : ''">
+                    <span th:if='${currentIndex == 1}'>← First</span>
+                    <a th:if='${currentIndex != 1}'
+                       th:href="@{${url+'/page/1'}}">← First</a>
+                </li>
+                <li th:class="${currentIndex != 1}? '' : 'disabled'">
+                    <span th:if='${currentIndex == 1}'>«</span>
+                    <a th:if='${currentIndex != 1}'
+                       th:href="@{${url+'/page/'+ (currentIndex - 1)}}"
+                       title='Go to previous page'>«</a>
+                </li>
+
+                <li th:each="item : ${#numbers.sequence(beginIndex,endIndex)}"
+                    th:class="${item == currentIndex ? 'active' : '' }">
+
+                    <span th:if='${item == currentIndex}' th:text='${item}'>1</span>
+
+                    <a th:if='${item != currentIndex}'
+                       th:href="@{/admin/user(page=${item})}">
+                        <span th:text='${item}'>1</span>
+                    </a>
+                </li>
+
+               
+            </ul>
+        </div>
+    </div>
+</div>

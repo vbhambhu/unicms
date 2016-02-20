@@ -1,0 +1,6 @@
+Delete
+
+        <form th:action="@{/admin/user/delete}" method="post">
+            <input type="hidden" th:field="*{user.id}" />
+            <input type="submit" value="Confirm"/>
+        </form>

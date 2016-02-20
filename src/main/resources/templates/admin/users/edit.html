@@ -2,7 +2,7 @@
     <body>
     
 
-        <form action="#" th:action="@{/admin/user/edit}" th:object="${user}" method="post">
+        <form action="#" th:action="@{/admin/user/edit(id=${user.id})}" th:object="${user}" method="post">
         <input type="hidden" th:field="*{id}" />
             <table>
                 <tr>
@@ -39,6 +39,26 @@
         			</td>
                     <td th:if="${#fields.hasErrors('roleName')}" th:errors="*{roleName}">Name Error</td>
                 </tr>
+                
+                
+                <tr>
+                    <td>Status:</td>
+                    <td>
+
+					 <select name="status">
+            			<option value="1" th:selected="${user.getStatus().equals(true)}">Enable</option>
+            			<option value="0" th:selected="${user.getStatus().equals(false)}">Disabled</option>
+        			</select>                  
+
+        			</td>
+                    <td th:if="${#fields.hasErrors('status')}" th:errors="*{status}">Name Error</td>
+                </tr>
+                
+                
+               
+                
+                
+                
                 <tr>
                     <td><button type="submit">Submit</button></td>
                 </tr>

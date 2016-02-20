@@ -28,7 +28,6 @@ public class AdminBlogController {
 		model.addAttribute("posts", postService.findAll() );
         return "admin/posts/list";
     }
-	 
 	/*
 	 
 	@RequestMapping(value="/admin/posts/new", method=RequestMethod.POST)
