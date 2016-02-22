@@ -29,7 +29,7 @@ public class AdminUserController {
 	UserService userService;
 	
 	@RequestMapping(value="/admin/user", method=RequestMethod.GET)
-    public String showUser(User user, Model model, @RequestParam(value = "page", defaultValue = "1") Integer page , @RequestParam(value = "limit", defaultValue = "2") Integer size) {
+    public String showUser(User user, Model model, @RequestParam(value = "page", defaultValue = "1") Integer page , @RequestParam(value = "limit", defaultValue = "10") Integer size) {
 		
 		int firstResult = (page==null) ? 0 : (page-1) * size;
 		
@@ -66,11 +66,17 @@ public class AdminUserController {
 		
 		if (bindingResult.hasErrors()) {
 			return "admin/users/add";
-        } else if( userService.emailExists( user.getEmail() ) ){
+        } 
+
+		if( userService.emailExists( user.getEmail() ) ){
 			bindingResult.rejectValue("email", "error.user", "An account already exists for this email.");
-		} else if( userService.usernameExists( user.getUsername() ) ){
+		} 
+
+		if( userService.usernameExists( user.getUsername() ) ){
 			bindingResult.rejectValue("username", "error.user", "An account already exists with this username.");
-		} else if (bindingResult.hasErrors()) {
+		} 
+
+		if (bindingResult.hasErrors()) {
 			return "admin/users/add";
         }
 		
@@ -104,11 +110,11 @@ public class AdminUserController {
 			return "admin/users/edit";
         }
 		
-		if( userService.emailCountByEmail( user.getEmail() ) != 1){
+		if( userService.emailCountByEmail( user.getEmail() ) > 1){
 			bindingResult.rejectValue("email", "error.user", "Not valid email.");
 		}
 		
-		if( userService.usernameCountByUsername( user.getUsername() ) != 1 ){
+		if( userService.usernameCountByUsername( user.getUsername() ) > 1 ){
 			bindingResult.rejectValue("username", "error.user", "Not valid username");
 		}
 		

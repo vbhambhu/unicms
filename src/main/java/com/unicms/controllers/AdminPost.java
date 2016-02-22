@@ -10,46 +10,63 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.unicms.models.Post;
 import com.unicms.models.User;
 import com.unicms.services.PostService;
 
 import groovyjarjarantlr.collections.List;
 
 @Controller
-public class AdminBlogController {
+public class AdminPost {
 	
 	@Autowired
 	PostService postService;
 	
-	
 	@RequestMapping(value="/admin/post", method=RequestMethod.GET)
 	public String showPosts(Model model) {
-		model.addAttribute("posts", postService.findAll() );
+		model.addAttribute("posts", postService.listPost() );
         return "admin/posts/list";
     }
-	/*
-	 
-	@RequestMapping(value="/admin/posts/new", method=RequestMethod.POST)
-	public String insertPost(@Valid Post post, BindingResult bindingResult,
-			@RequestParam("image") MultipartFile image,
-			@RequestParam("categories") List categories) {
+	
+	
+	@RequestMapping(value="/admin/post/new", method=RequestMethod.GET)
+	public String createPost(Post post, Model model) {
+		
+		model.addAttribute("categories", postService.listCategories());
+		
+		return "admin/posts/insert";
+    }
+	
+	@RequestMapping(value="/admin/post/new", method=RequestMethod.POST)
+	public String insertPost(@Valid Post post, BindingResult bindingResult, Model model) {
+		
+		model.addAttribute("categories", postService.listCategories());
 		
 		if (bindingResult.hasErrors()) {
 			 return "admin/posts/insert";
         }
 		
-		System.out.println(categories);
+		if( postService.slugCount( post.getSlug() ) > 0 ){
+			bindingResult.rejectValue("slug", "error.post", "Seo url already exists.");
+		}
 		
+		if (bindingResult.hasErrors()) {
+			return "admin/posts/insert";
+        }
 		
-		//String fileName = image.getOriginalFilename();
+		//Create new post
+		postService.createPost(post);
 
-		SecureRandom random = new SecureRandom();
-		String imageName = new BigInteger(130, random).toString(32)+".jpg";
-		postJDBCTemplate.create(post.getTitle(), post.getName(), post.getContent(), imageName , post.getStatus());
-        return "redirect:/admin/posts";
+		
+        return "redirect:/admin/post";
     }
 	
+	
+	
+	
+	/*
 	
 	@RequestMapping(value="/admin/posts/edit", method=RequestMethod.GET)
     public String editForm(@RequestParam("id") int id, Model model) {

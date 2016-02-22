@@ -1,4 +1,17 @@
-<h3>All Posts</h3>
+ <!doctype html>
+<html>
+<head>
+<title>Hello AngularJS</title>
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/css/style.css" rel="stylesheet" />
+</head>
+<body>
+<div class="container">
+
+
+<h3 class="page-header">All posts</h3>
+
+<a th:href="@{/admin/post/new}" class="btn btn-success">Add new post</a>
 
 <table border="1">
 
@@ -11,4 +24,8 @@
 </tr>
 
 </table>
-<a th:href="@{/admin/posts/new}">New Post</a>
+
+
+</div>
+</body>
+</html>

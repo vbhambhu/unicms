@@ -1,6 +1,20 @@
-<h3>All Users</h3>
-<a th:href="@{/admin/user/new}">Add new user</a>
-<table border="1">
+ <!doctype html>
+<html>
+<head>
+<title>Hello AngularJS</title>
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/css/style.css" rel="stylesheet" />
+</head>
+<body>
+<div class="container">
+
+
+<h3 class="page-header">All users</h3>
+
+<a th:href="@{/admin/user/new}" class="btn btn-success">Add new user</a>
+
+
+<table>
 <tr>
 <th>Username</th>
 <th>Email</th>
@@ -13,47 +27,23 @@
 </tr>
 
 <tr th:each="user : ${users}">
-    <td th:text="${user.username}">1</td>
-    <td th:text="${user.email}">Text ...</td>
-    <td th:text="${user.fullName}">Text ...</td>
-     <td th:text="${user.roleName}">Text ...</td>
-    <td th:text="${user.status}">Text ...</td>
-    <td th:text="${user.created_at}">Text ...</td>
+    <td th:text="${user.username}"></td>
+    <td th:text="${user.email}"></td>
+    <td th:text="${user.fullName}"></td>
+     <td th:text="${user.roleName}"></td>
+    <td th:text="${user.status}"></td>
+    <td th:text="${user.created_at}"></td>
     <td><a th:href="@{/admin/user/edit(id=${user.id})}">Edit</a></td>
     <td><a th:href="@{/admin/user/delete(id=${user.id})}">Delete</a></td>
 </tr>
 </table>
 
 
-<div class="row">
-    <div class="col-md-12 text-center">
-        <div class='pagination pagination-centered'>
-            <ul class="pagination">
-                <li th:class="${currentIndex == 1}? 'disabled' : ''">
-                    <span th:if='${currentIndex == 1}'>← First</span>
-                    <a th:if='${currentIndex != 1}'
-                       th:href="@{${url+'/page/1'}}">← First</a>
-                </li>
-                <li th:class="${currentIndex != 1}? '' : 'disabled'">
-                    <span th:if='${currentIndex == 1}'>«</span>
-                    <a th:if='${currentIndex != 1}'
-                       th:href="@{${url+'/page/'+ (currentIndex - 1)}}"
-                       title='Go to previous page'>«</a>
-                </li>
 
-                <li th:each="item : ${#numbers.sequence(beginIndex,endIndex)}"
-                    th:class="${item == currentIndex ? 'active' : '' }">
 
-                    <span th:if='${item == currentIndex}' th:text='${item}'>1</span>
 
-                    <a th:if='${item != currentIndex}'
-                       th:href="@{/admin/user(page=${item})}">
-                        <span th:text='${item}'>1</span>
-                    </a>
-                </li>
 
-               
-            </ul>
-        </div>
-    </div>
+
 </div>
+</body>
+</html>

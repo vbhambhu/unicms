@@ -1,68 +1,91 @@
+ <!doctype html>
 <html>
-    <body>
+<head>
+<title>Hello AngularJS</title>
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/css/style.css" rel="stylesheet" />
+</head>
+<body>
+<div class="container">
+
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+  
+<h3 class="page-header">Edit user</h3>
+
+<form action="#" th:action="@{/admin/user/edit(id=${user.id})}"  th:object="${user}" method="post">
+
+
+
+ <div class="form-group " th:classappend="${#fields.hasErrors('username')} ? has-error">
+    <label for="username">Username</label>
+   	<input type="text" th:field="*{username}" class="form-control"/>
+   	<span class="help-block" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Woohoo!</span>
+ </div>
+ 
+ 
+  <div class="form-group " th:classappend="${#fields.hasErrors('email')} ? has-error">
+    <label for="username">Email address</label>
+   	<input type="text" th:field="*{email}" class="form-control"/>
+   	<span class="help-block" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Woohoo!</span>
+ </div>
+ 
+ 
+ <div class="form-group " th:classappend="${#fields.hasErrors('firstName')} ? has-error">
+    <label for="username">First name</label>
+   	<input type="text" th:field="*{firstName}" class="form-control"/>
+   	<span class="help-block" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Woohoo!</span>
+ </div>
+
+
+ <div class="form-group " th:classappend="${#fields.hasErrors('lastName')} ? has-error">
+    <label for="username">Last name</label>
+   	<input type="text" th:field="*{lastName}" class="form-control"/>
+   	<span class="help-block" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Woohoo!</span>
+ </div>
+ 
+ 
+ <div class="form-group " th:classappend="${#fields.hasErrors('password')} ? has-error">
+    <label for="username">New password</label>
+   	<input type="password" th:field="*{password}" class="form-control"/>
+   	<span class="help-block" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Woohoo!</span>
+ </div>
+ 
+ 
+ <div class="form-group">
+    <label for="username">User role</label>
     
-
-        <form action="#" th:action="@{/admin/user/edit(id=${user.id})}" th:object="${user}" method="post">
-        <input type="hidden" th:field="*{id}" />
-            <table>
-                <tr>
-                    <td>Username*:</td>
-                    <td><input type="text" th:field="*{username}" /></td>
-                    <td th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name Error</td>
-                </tr>
-                <tr>
-                    <td>Email*:</td>
-                    <td><input type="text" th:field="*{email}" /></td>
-                    <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name Error</td>
-                </tr>
-                <tr>
-                    <td>First Name:</td>
-                    <td><input type="text" th:field="*{firstName}" /></td>
-                    <td th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Name Error</td>
-                </tr>
-                <tr>
-                    <td>Last Name:</td>
-                    <td><input type="text" th:field="*{lastName}" /></td>
-                    <td th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Name Error</td>
-                </tr>
-                <tr>
-                    <td>New password:</td>
-                    <td><input type="password" th:field="*{password}" /></td>
-                    <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name Error</td>
-                </tr>
-                 <tr>
-                    <td>Role:</td>
-                    <td>
-                    <select name="roleId">
-            			<option th:each="role : ${roles}" th:value="${role.roleId}"  th:text="${role.roleName}" th:selected="${role.roleId.equals(user.getRoleId() )}">Options</option>
-        			</select>
-        			</td>
-                    <td th:if="${#fields.hasErrors('roleName')}" th:errors="*{roleName}">Name Error</td>
-                </tr>
-                
-                
-                <tr>
-                    <td>Status:</td>
-                    <td>
-
-					 <select name="status">
+     <select  class="form-control" th:field="*{roleId}">
+            			<option th:each="role : ${roles}" th:value="${role.roleId}"  th:text="${role.roleName}">Options</option>
+     </select>
+ </div>
+ 
+ 
+ 
+  <div class="form-group">
+    <label for="username">Status</label>
+    
+      <select name="status"  class="form-control">
             			<option value="1" th:selected="${user.getStatus().equals(true)}">Enable</option>
             			<option value="0" th:selected="${user.getStatus().equals(false)}">Disabled</option>
-        			</select>                  
+        			</select>     
+        			
+        			
+ </div>
 
-        			</td>
-                    <td th:if="${#fields.hasErrors('status')}" th:errors="*{status}">Name Error</td>
-                </tr>
-                
-                
-               
-                
-                
-                
-                <tr>
-                    <td><button type="submit">Submit</button></td>
-                </tr>
-            </table>
-        </form>
-    </body>
+
+
+<button type="submit" class="btn btn-success">Save</button>
+
+<a href="/admin/user" class="btn btn-default">Cancel</a>
+
+</form>
+
+
+
+</div>
+</div>
+</div>
+</body>
 </html>

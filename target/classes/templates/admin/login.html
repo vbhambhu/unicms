@@ -1,15 +1,30 @@
-
+<!doctype html>
+<html>
+<head>
+<title>Login</title>
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/css/style.css" rel="stylesheet" />
+</head>
+<body>
+<div class="container">
   
-       <div th:if="${param.error}" class="alert alert-error">    
-                    Invalid username and password.
-                </div>
-                <div th:if="${param.logout}" class="alert alert-success"> 
-                    You have been logged out.
-                </div>
+
+
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+
+
+       <div th:if="${param.error}" class="alert alert-danger">    
+          Invalid username and password.
+      	</div>
+                
+        <div th:if="${param.logout}" class="alert alert-success"> 
+            You have been logged out.
+        </div>
       
       
-    <form th:action="@{/admin/login}" name="loginForm"  method="post">
-      
+<form th:action="@{/admin/login}" name="loginForm"  method="post">
   <div class="form-group">
     <label for="userNameInput">Username</label>
     <input type="text" class="form-control" id="userNameInput" name="username" placeholder="Username" />
@@ -21,5 +36,10 @@
   
   <button type="submit" class="btn btn-success">Login</button>
 </form>
+</div>
+</div>
 
+</div>
+</body>
+</html>
        

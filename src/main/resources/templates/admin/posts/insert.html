@@ -1,23 +1,79 @@
-<h3>Add new Post</h3>
-<form th:action="@{/admin/posts/new}" method="post" enctype="multipart/form-data" th:object="${post}">
-<div><label> Title : <input type="text" name="title"/> </label></div>
-<div><label> SEO URL : <input type="text" name="name"/> </label></div>
-<div><label> Content: <textarea name="content"></textarea></label></div>
-<div><label> Image : <input type="file" name="image"/> </label></div>
-<div>
-<select name="status">
+<!doctype html>
+<html>
+<head>
+<title>Hello AngularJS</title>
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/css/style.css" rel="stylesheet" />
+</head>
+<body>
+<div class="container">
+
+
+
+
+<h3 class="page-header">Add new post</h3>   
+
+
+<form th:action="@{/admin/post/new}" method="post" th:object="${post}">
+
+
+ <div class="form-group" th:classappend="${#fields.hasErrors('title')} ? has-error">
+    <label for="title">Title</label>
+   	<input type="text" th:field="*{title}" class="form-control"/>
+   	<span class="help-block" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Woohoo!</span>
+ </div>
+ 
+ 
+ <div class="form-group" th:classappend="${#fields.hasErrors('slug')} ? has-error">
+    <label for="slug">Slug</label>
+   	<input type="text" th:field="*{slug}" class="form-control"/>
+   	<span class="help-block" th:if="${#fields.hasErrors('slug')}" th:errors="*{slug}">Woohoo!</span>
+ </div>
+ 
+ 
+ 
+<div class="form-group" th:classappend="${#fields.hasErrors('content')} ? has-error">
+    <label for="content">Content</label>
+   	<textarea th:field="*{content}" class="form-control"></textarea>
+   	<span class="help-block" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">Woohoo!</span>
+ </div>
+ 
+ 
+ <div class="form-group">
+    <label for="status">Status</label>
+    
+    <select name="status" class="form-control">
   <option value="true">Publish</option>
   <option value="false">Draft</option>
 </select>
+   
+   
+ </div>
+ 
+ 
+ 
+ <div class="form-group">
+    <label for="category">Category</label>
+    
+     <select  class="form-control" th:field="*{categoryId}">
+           <option th:each="category : ${categories}" th:value="${category.categoryId}"  th:text="${category.categoryName}">Options</option>
+     </select>
+   	
+   	
+ </div>
+
+
+
+<div><input type="submit" value="Create" class="btn btn-success"/></div>
+</form>
+
+
 </div>
 
 
-<select multiple="multiple" name="categories">
-  <option value="volvo">Volvo</option>
-  <option value="saab">Saab</option>
-  <option value="opel">Opel</option>
-  <option value="audi">Audi</option>
-</select>
-
-<div><input type="submit" value="Create"/></div>
-</form>
+<script  src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="/js/app.js"></script>
+  
+  
+</body>
+</html>

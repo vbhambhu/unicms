@@ -1,6 +1,30 @@
-Delete
+ <!doctype html>
+<html>
+<head>
+<title>Hello AngularJS</title>
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/css/style.css" rel="stylesheet" />
+</head>
+<body>
+<div class="container">
+
+
+
+
+<h3 class="page-header">Confirm delete</h3>
+
+
+<p><b>Username:</b> <span th:text="${user.username}"></span>  </p>
+<p><b>Name:</b> <span th:text="${user.firstName}"></span> <span th:text="${user.lastName}"></span>  </p>
+
 
         <form th:action="@{/admin/user/delete}" method="post">
             <input type="hidden" th:field="*{user.id}" />
-            <input type="submit" value="Confirm"/>
+            <input type="submit" class="btn btn-success" value="Confirm and delete user"/> <a href="/admin/user" class="btn btn-default">Cancel</a>
         </form>
+        
+        
+
+</div>
+</body>
+</html>
