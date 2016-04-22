@@ -19,7 +19,7 @@ public class PostService {
     JdbcTemplate jdbcTemplate;
 
 	public Post findAll() {
-		
+
 		return null;
 	}
 	
@@ -63,7 +63,6 @@ public class PostService {
 				  post.getCategoryId(),
 				  post.isStatus(),
 				  date_format.format(dateobj) });
-		
 	}
 
 	
