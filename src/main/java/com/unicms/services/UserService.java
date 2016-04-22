@@ -33,11 +33,11 @@ public class UserService {
 		
 	}
 	
-	public Long count(){
+	public int count(){
 		
 		String SQL = "SELECT count(id) FROM users";
 		
-		return (jdbcTemplate.queryForObject(SQL, Long.class));
+		return (jdbcTemplate.queryForObject(SQL, Integer.class));
 		 
 	}
 	

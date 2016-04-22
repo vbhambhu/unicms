@@ -38,8 +38,18 @@ public class AdminUserController {
 		
 		int start = (page==null) ? 0 : (page-1) * perPage;
 		
+		int total_rows = userService.count();
+		
+		int total_pages = (total_rows / perPage);
+		
 		model.addAttribute("users", userService.listUser(perPage, start, sortBy, order));
-		model.addAttribute("count", userService.count());
+	
+		
+		model.addAttribute("page", start);
+		
+		model.addAttribute("totalPages", total_pages);
+		
+		
 //		model.addAttribute("offset", firstResult);
 //		model.addAttribute("beginIndex", firstResult);
 //		model.addAttribute("endIndex", userService.count() );
