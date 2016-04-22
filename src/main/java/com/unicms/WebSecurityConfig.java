@@ -33,18 +33,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	 @Override
 	 protected void configure(HttpSecurity http) throws Exception {
 	 
-	   http.authorizeRequests()
-	   .antMatchers("/admin/login").permitAll()
-	  .antMatchers("/admin/**").authenticated()
-	  .anyRequest().permitAll()
-	  .and()
-	    .formLogin().loginPage("/admin/login").defaultSuccessUrl("/admin")
-	    .usernameParameter("username").passwordParameter("password").loginProcessingUrl("/admin/login")
-	  .and()
-	    .logout().logoutSuccessUrl("/admin/login?logout") 
-	   .and()
-	   .exceptionHandling().accessDeniedPage("/403")
-	  .and()
-	    .csrf();
+//	   http.authorizeRequests()
+//	   .antMatchers("/admin/login").permitAll()
+//	  .antMatchers("/admin/**").authenticated()
+//	  .anyRequest().permitAll()
+//	  .and()
+//	    .formLogin().loginPage("/admin/login").defaultSuccessUrl("/admin")
+//	    .usernameParameter("username").passwordParameter("password").loginProcessingUrl("/admin/login")
+//	  .and()
+//	    .logout().logoutSuccessUrl("/admin/login?logout") 
+//	   .and()
+//	   .exceptionHandling().accessDeniedPage("/403")
+//	  .and()
+//	  .csrf();
 	 }
 }

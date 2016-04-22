@@ -34,7 +34,7 @@ public class User {
 	//getters and setters
 	
 	public String getFullName() {
-		return fullName;
+		return this.getFirstName() + " " + this.getLastName();
 	}
 
 	public void setFullName(String firstName, String lastName) {
