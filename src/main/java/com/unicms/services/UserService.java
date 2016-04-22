@@ -25,11 +25,12 @@ public class UserService {
 	
 
 
-	public List<User> listUser(int limit, int offset) {
+	public List<User> listUser(int limit, int offset, String sortBy, String order) {
 		
-		String SQL = "SELECT u.id,u.username,u.email,u.first_name,u.last_name,u.status,u.created_at,ur.role_name FROM users u LEFT JOIN user_roles ur ON (u.role_id = ur.role_id) ORDER BY u.created_at DESC LIMIT "+offset+" OFFSET "+limit;
-		List <User> users = jdbcTemplate.query(SQL, new BeanPropertyRowMapper<User>(User.class));
+		String SQL = "SELECT u.id,u.username,u.email,u.first_name,u.last_name,u.status,u.created_at,ur.role_name FROM users u LEFT JOIN user_roles ur ON (u.role_id = ur.role_id) ORDER BY ? ? LIMIT ? OFFSET ?";
+		List <User> users = jdbcTemplate.query(SQL, new BeanPropertyRowMapper<User>(User.class), sortBy, order, limit, offset);
 		return users;
+		
 	}
 	
 	public Long count(){

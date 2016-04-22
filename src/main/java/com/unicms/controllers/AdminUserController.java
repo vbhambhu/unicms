@@ -29,17 +29,21 @@ public class AdminUserController {
 	UserService userService;
 	
 	@RequestMapping(value="/admin/user", method=RequestMethod.GET)
-    public String showUser(User user, Model model, @RequestParam(value = "page", defaultValue = "1") Integer page , @RequestParam(value = "limit", defaultValue = "10") Integer size) {
+    public String showUser(User user, Model model, 
+    		@RequestParam(value = "page", defaultValue = "1") Integer page , 
+    		@RequestParam(value = "limit", defaultValue = "2") Integer perPage,
+    		@RequestParam(value = "sortBy", defaultValue = "created_at") String sortBy,
+    		@RequestParam(value = "order", defaultValue = "DESC") String order
+    		) {
 		
-		int firstResult = (page==null) ? 0 : (page-1) * size;
+		int start = (page==null) ? 0 : (page-1) * perPage;
 		
-		model.addAttribute("users", userService.listUser(firstResult, size));
+		model.addAttribute("users", userService.listUser(perPage, start, sortBy, order));
 		model.addAttribute("count", userService.count());
-		model.addAttribute("offset", firstResult);
-		
-		model.addAttribute("beginIndex", firstResult);
-		model.addAttribute("endIndex", userService.count() );
-		model.addAttribute("currentIndex", page);
+//		model.addAttribute("offset", firstResult);
+//		model.addAttribute("beginIndex", firstResult);
+//		model.addAttribute("endIndex", userService.count() );
+//		model.addAttribute("currentIndex", page);
 		
 		//System.out.println(page);
 		  

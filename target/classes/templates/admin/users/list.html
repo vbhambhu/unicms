@@ -11,14 +11,43 @@
 
 <h3 class="page-header">All users</h3>
 
-<a th:href="@{/admin/user/new}" class="btn btn-success">Add new user</a>
 
 
-<table>
+
+<div class="row">
+  <div class="col-md-5">
+
+<form action="/admin/user">
+ <div class="input-group">
+      <input type="text" class="form-control" name="q" placeholder="Search for..." />
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">Search</button>
+      </span>
+    </div>
+</form>
+
+</div>
+
+  
+   <div class="col-md-7">
+  
+  
+  <a th:href="@{/admin/user/new}" class="btn btn-success pull-right">Add new user</a>
+
+
+</div>
+</div>
+
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<table class="table table-striped">
 <tr>
-<th>Username</th>
-<th>Email</th>
+
+<th><a th:href="@{/admin/user?sortBy=username}">Username</a></th>
 <th>Name</th>
+<th>Email</th>
 <th>Role</th>
 <th>Status</th>
 <th>Created at</th>
@@ -28,19 +57,37 @@
 
 <tr th:each="user : ${users}">
     <td th:text="${user.username}"></td>
-    <td th:text="${user.email}"></td>
     <td th:text="${user.fullName}"></td>
+    <td th:text="${user.email}"></td>
      <td th:text="${user.roleName}"></td>
-    <td th:text="${user.status}"></td>
+    <td><span th:class="${user.status} ? 'label label-success' : 'label label-danger'"  th:text="${user.status} ? 'Active' : 'Disabled'" ></span></td>
     <td th:text="${user.created_at}"></td>
-    <td><a th:href="@{/admin/user/edit(id=${user.id})}">Edit</a></td>
-    <td><a th:href="@{/admin/user/delete(id=${user.id})}">Delete</a></td>
+    <td><a class="btn btn-default btn-sm" th:href="@{/admin/user/edit(id=${user.id})}">Edit</a></td>
+    <td><a class="btn btn-danger btn-sm" th:href="@{/admin/user/delete(id=${user.id})}">Delete</a></td>
 </tr>
 </table>
 
 
 
-
+<nav>
+  <ul class="pagination">
+    <li>
+      <a href="#" aria-label="Previous">
+        <span aria-hidden="true">Previous &laquo;</span>
+      </a>
+    </li>
+    <li><a href="#">1</a></li>
+    <li><a href="#">2</a></li>
+    <li><a href="#">3</a></li>
+    <li><a href="#">4</a></li>
+    <li><a href="#">5</a></li>
+    <li>
+      <a href="#" aria-label="Next">
+        <span aria-hidden="true">Next &raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
 
 
 

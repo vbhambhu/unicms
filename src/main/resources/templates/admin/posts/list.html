@@ -13,7 +13,7 @@
 
 <a th:href="@{/admin/post/new}" class="btn btn-success">Add new post</a>
 
-<table border="1">
+<table class="table table-striped">
 
 <tr th:each="post : ${posts}">
     <td th:text="${post.id}">1</td>
