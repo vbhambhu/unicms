@@ -11,17 +11,21 @@ public class User {
 	
 	private int id;
 
-	@Size(min=6, max=30)
+	@Size(min=6, max=50, message = "Please use between 6 and 50 characters.")
     private String username;
 	
-	@Size(min=6, max=30)
+	@Size(min=6, max=30, message = "Please use password between 6 and 30 characters.")
 	private String password;
 	
-	@ValidEmail
+	@ValidEmail(message = "Please use a valid email address.")
 	private String email;
 	
+	@Size(min=3, max=50,  message = "Please use between 3 and 50 characters.")
 	private String firstName;
+	
+	@Size(min=3, max=50, message = "Please use between 3 and 50 characters.")
 	private String lastName;
+	
 	private String fullName;
 	private boolean status;
 	private String created_at;

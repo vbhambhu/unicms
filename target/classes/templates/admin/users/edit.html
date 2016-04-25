@@ -8,6 +8,7 @@
 <body>
 <div class="container">
 
+<div ng-app="createUser" ng-controller="frmCtrl">
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
@@ -46,7 +47,17 @@
  </div>
  
  
- <div class="form-group " th:classappend="${#fields.hasErrors('password')} ? has-error">
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" ng-model="userForm.newPassword" name="updatePassword" /> Set new password?
+    </label>
+  </div>
+   <div class="form-group" th:classappend="${#fields.hasErrors('password')} ? has-error">
+  <span ng-if="!userForm.newPassword" class="has-error help-block" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Woohoo!</span>
+  </div>
+ 
+ 
+ <div class="form-group" ng-if="userForm.newPassword" th:classappend="${#fields.hasErrors('password')} ? has-error">
     <label for="username">New password</label>
    	<input type="password" th:field="*{password}" class="form-control"/>
    	<span class="help-block" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Woohoo!</span>
@@ -87,5 +98,10 @@
 </div>
 </div>
 </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="/js/app.js"></script>
+
 </body>
 </html>

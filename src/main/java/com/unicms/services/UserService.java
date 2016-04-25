@@ -3,6 +3,7 @@ package com.unicms.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,20 +26,49 @@ public class UserService {
 	
 
 
-	public List<User> listUser(int limit, int offset, String sortBy, String order) {
+	public List<User> listUser(int limit, int offset, String sortBy, String order, String query) {
 		
-		String SQL = "SELECT u.id,u.username,u.email,u.first_name,u.last_name,u.status,u.created_at,ur.role_name FROM users u LEFT JOIN user_roles ur ON (u.role_id = ur.role_id) ORDER BY ? ? LIMIT ? OFFSET ?";
-		List <User> users = jdbcTemplate.query(SQL, new BeanPropertyRowMapper<User>(User.class), sortBy, order, limit, offset);
-		return users;
+		String SQL = null;
+		
+		if (query.trim().length() > 0){
+			
+			query = "'%" +query.toLowerCase().trim() + "%'";
+			SQL = String.format("SELECT u.id,u.username,u.email,u.first_name,u.last_name,u.status,u.created_at,ur.role_name FROM users u LEFT JOIN user_roles ur ON (u.role_id = ur.role_id) WHERE username LIKE %s OR first_name LIKE %s OR last_name LIKE %s or email LIKE %s ORDER BY %s %s LIMIT ?,?",query,query,query,query,sortBy, order);
+			
+			 List <User> users = jdbcTemplate.query(SQL, new BeanPropertyRowMapper<User>(User.class), offset, limit);
+			return users;
+			
+			
+		} else {
+			
+			 SQL = String.format("SELECT u.id,u.username,u.email,u.first_name,u.last_name,u.status,u.created_at,ur.role_name FROM users u LEFT JOIN user_roles ur ON (u.role_id = ur.role_id) ORDER BY %s %s LIMIT ?,?", sortBy, order);
+			List <User> users = jdbcTemplate.query(SQL, new BeanPropertyRowMapper<User>(User.class),  offset, limit);
+			return users;
+			
+			
+		}
+		
+		
+		
+		
 		
 	}
 	
-	public int count(){
+	public int count(String query){
 		
-		String SQL = "SELECT count(id) FROM users";
+		String SQL = null;
 		
-		return (jdbcTemplate.queryForObject(SQL, Integer.class));
-		 
+		if (query.trim().length() > 0){
+			
+			query = "'%" +query.toLowerCase().trim() + "%'";
+			
+			 SQL = String.format("SELECT count(id) FROM users WHERE username LIKE %s OR first_name LIKE %s OR last_name LIKE %s or email LIKE %s", query,query,query,query);
+			 return (jdbcTemplate.queryForObject(SQL, Integer.class));
+			
+		} else {
+			 SQL = "SELECT count(id) FROM users";
+			 return (jdbcTemplate.queryForObject(SQL, Integer.class));
+		} 
 	}
 	
 	
@@ -70,7 +100,7 @@ public class UserService {
 
 	public boolean usernameExists(String username) {
 		
-		String SQL = "SELECT count(*) FROM users WHERE username = ?";
+		String SQL = "SELECT count(*) FROM users WHERE LOWER(username) = ?";
 		boolean result = false;
 
 		int count = jdbcTemplate.queryForObject(SQL, new Object[] { username }, Integer.class);
@@ -149,18 +179,40 @@ public class UserService {
 	
 	public void updateUser(User user){
 		
-		
-		System.out.println(user.getStatus());
-		
-	      String SQL = "UPDATE users SET username = ?, email = ?,first_name = ?,last_name = ?,role_id = ?, status = ?  WHERE id = ?";
-	      
-	      jdbcTemplate.update(SQL, user.getUsername(),
-	    		  user.getEmail() , 
-	    		  user.getFirstName(),
-	    		  user.getLastName(),
-	    		  user.getRoleId(),
-	    		  user.getStatus(),
-	    		  user.getId());
+		DateFormat date_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    Date dateobj = new Date();
+	    
+	    if(user.getPassword() != null){
+	    	
+	    	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	  	    String hashedPassword = passwordEncoder.encode(user.getPassword());
+	    	
+	    	String SQL = "UPDATE users SET username = ?, email = ?, password = ?, first_name = ?,last_name = ?,role_id = ?, status = ?, updated_at = ?  WHERE id = ?";
+	    	jdbcTemplate.update(SQL, user.getUsername(),
+		    		  user.getEmail() , 
+		    		  hashedPassword,
+		    		  user.getFirstName(),
+		    		  user.getLastName(),
+		    		  user.getRoleId(),
+		    		  user.getStatus(),
+		    		  date_format.format(dateobj),
+		    		  user.getId()
+		    		  );
+	 
+	    } else {
+	    	
+	    	String SQL = "UPDATE users SET username = ?, email = ?,first_name = ?,last_name = ?,role_id = ?, status = ?, updated_at = ?  WHERE id = ?";
+	    	jdbcTemplate.update(SQL, user.getUsername(),
+		    		  user.getEmail() , 
+		    		  user.getFirstName(),
+		    		  user.getLastName(),
+		    		  user.getRoleId(),
+		    		  user.getStatus(),
+		    		  date_format.format(dateobj),
+		    		  user.getId() );
+	    }
+	       
+
 	      
 	 }
 	

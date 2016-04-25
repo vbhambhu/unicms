@@ -1,3 +1,4 @@
+
 function urlTitle(text) {       
     var characters = [' ', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '+', '=', '_', '{', '}', '[', ']', '|', '/', '<', '>', ',', '.', '?', '--']; 
 
@@ -9,7 +10,21 @@ function urlTitle(text) {
     return text;
 }
 
+var createUser = angular.module('createUser', []);
+createUser.controller('frmCtrl', function($scope) {});
 
-$("#title").focusout(function() {
-    $("#slug").val(urlTitle($(this).val()));
+
+var createUser = angular.module('createPost', []);
+
+createUser.controller('postCtrl', function($scope) {
+	
+	
+	
+	$scope.generateSeo = function() {
+		
+		console.log("2");
+        $scope.seo = "dd";
+    };
+	
 });
+

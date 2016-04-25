@@ -11,9 +11,6 @@
 
 <h3 class="page-header">All users</h3>
 
-
-
-
 <div class="row">
   <div class="col-md-5">
 
@@ -45,12 +42,12 @@
 <table class="table table-striped">
 <tr>
 
-<th><a th:href="@{/admin/user?sortBy=username}">Username</a></th>
-<th>Name</th>
-<th>Email</th>
-<th>Role</th>
-<th>Status</th>
-<th>Created at</th>
+<th><a th:href="@{/admin/user(sort='username',dir=${nxtdir})}">Username</a></th>
+<th><a th:href="@{/admin/user(sort='first_name',dir=${nxtdir})}">Name</a></th>
+<th><a th:href="@{/admin/user(sort='email',dir=${nxtdir})}">Email</a></th>
+<th><a th:href="@{/admin/user(sort='role_name',dir=${nxtdir})}">Role</a></th>
+<th><a th:href="@{/admin/user(sort='status',dir=${nxtdir})}">Status</a></th>
+<th><a th:href="@{/admin/user(sort='created_at',dir=${nxtdir})}">Created at</a></th>
 <th>Edit</th>
 <th>Delete</th>
 </tr>
@@ -69,38 +66,33 @@
 
 
 
-<nav>
+<nav th:if="${pStart != pEnd and pEnd >= currentPage}">
   <ul class="pagination">
-   	<li>
-      <a href="#" aria-label="Previous">
-        <span aria-hidden="true">First</span>
-      </a>
-    </li>
-    
-    <li>
-      <a href="#" aria-label="Previous">
-        <span aria-hidden="true">Previous &laquo;</span>
-      </a>
-    </li>
-    
-    
-    <li th:each="i : ${#numbers.sequence( 1, 5)}">
 
-	<a href="#">1</a>
+
+    
+    <li th:if="${currentPage} > 1">
+      <a th:href="@{/admin/user(page=${currentPage-1})}"><span>&laquo; Prev</span></a>
+    </li>
+    
+    
+    <li th:each="i : ${#numbers.sequence(pStart, pEnd)}" th:class="${i} == ${currentPage} ? 'active' : '' ">
+
+		<a th:href="@{/admin/user(page=${i})}" th:text="${i}" th:unless="${param.sort != null}">1</a>
+		
+		<a th:href="@{/admin/user(sort=${param.sort[0]},dir=${param.dir[0]},page=${i})}" th:text="${i}" th:unless="${param.sort == null}">1</a>
+	
+	
 	</li>
+	
+	
+	<li th:if="${currentPage} != ${lastPage}">
+       <a th:href="@{/admin/user(page=${currentPage+1})}"><span>Next &raquo;</span></a>
+    </li>
         
  
-    <li>
-      <a href="#" aria-label="Next">
-        <span aria-hidden="true">Next &raquo;</span>
-      </a>
-    </li>
+
     
-     <li>
-      <a href="#" aria-label="Previous">
-        <span aria-hidden="true">Last</span>
-      </a>
-    </li>
     
   </ul>
 </nav>

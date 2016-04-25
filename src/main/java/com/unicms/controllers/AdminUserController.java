@@ -2,7 +2,10 @@ package com.unicms.controllers;
 
 import java.awt.print.Pageable;
 import java.util.HashMap;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.tomcat.util.net.jsse.openssl.Authentication;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.unicms.models.User;
 import com.unicms.services.UserService;
@@ -29,33 +33,32 @@ public class AdminUserController {
 	UserService userService;
 	
 	@RequestMapping(value="/admin/user", method=RequestMethod.GET)
-    public String showUser(User user, Model model, 
+    public String showUser(
+    		User user, 
+    		Model model,
+    		HttpServletRequest request,
     		@RequestParam(value = "page", defaultValue = "1") Integer page , 
-    		@RequestParam(value = "limit", defaultValue = "2") Integer perPage,
-    		@RequestParam(value = "sortBy", defaultValue = "created_at") String sortBy,
-    		@RequestParam(value = "order", defaultValue = "DESC") String order
+    		@RequestParam(value = "limit", defaultValue = "5") Integer perPage,
+    		@RequestParam(value = "sort", defaultValue = "created_at") String sortBy,
+    		@RequestParam(value = "dir", defaultValue = "asc") String order,
+    		@RequestParam(value = "q", defaultValue = "") String query
     		) {
 		
 		int start = (page==null) ? 0 : (page-1) * perPage;
-		
-		int total_rows = userService.count();
-		
-		int total_pages = (total_rows / perPage);
-		
-		model.addAttribute("users", userService.listUser(perPage, start, sortBy, order));
-	
-		
-		model.addAttribute("page", start);
-		
-		model.addAttribute("totalPages", total_pages);
+		int total_rows = userService.count(query);
+		int total_pages = (int) Math.ceil(total_rows / (float)perPage);
+		int pStart = (page - 2) > 0  ? (page - 2) : 1;
+		int pEnd = (page + 2) < total_pages  ? (page + 2) : total_pages;
 		
 		
-//		model.addAttribute("offset", firstResult);
-//		model.addAttribute("beginIndex", firstResult);
-//		model.addAttribute("endIndex", userService.count() );
-//		model.addAttribute("currentIndex", page);
+		model.addAttribute("users", userService.listUser(perPage, start, sortBy, order, query));
+		model.addAttribute("currentPage", page);
+		model.addAttribute("nextPage", page + 1);
+		model.addAttribute("lastPage", total_pages);
+		model.addAttribute("nxtdir", order.equals("asc") ? "desc" : "asc");
+		model.addAttribute("pStart", pStart);
+		model.addAttribute("pEnd", pEnd);
 		
-		//System.out.println(page);
 		  
         return "admin/users/list";
         
@@ -83,7 +86,7 @@ public class AdminUserController {
         } 
 
 		if( userService.emailExists( user.getEmail() ) ){
-			bindingResult.rejectValue("email", "error.user", "An account already exists for this email.");
+			bindingResult.rejectValue("email", "error.user", "An account already exists for this email address.");
 		} 
 
 		if( userService.usernameExists( user.getUsername() ) ){
@@ -125,11 +128,11 @@ public class AdminUserController {
         }
 		
 		if( userService.emailCountByEmail( user.getEmail() ) > 1){
-			bindingResult.rejectValue("email", "error.user", "Not valid email.");
+			bindingResult.rejectValue("email", "error.user", "An account already exists for this email address.");
 		}
 		
 		if( userService.usernameCountByUsername( user.getUsername() ) > 1 ){
-			bindingResult.rejectValue("username", "error.user", "Not valid username");
+			bindingResult.rejectValue("username", "error.user", "An account already exists with this username.");
 		}
 		
 		if (bindingResult.hasErrors()) {
@@ -183,6 +186,36 @@ public class AdminUserController {
 		
 		userService.deleteUser(user.getId());
 		return "redirect:/admin/user";
+		
+	}
+	
+	
+	@RequestMapping(value="/admin/user/validate", method=RequestMethod.GET)
+	@ResponseBody
+	public Map validateUser(
+			@RequestParam(value = "o", defaultValue = "") String column,
+			@RequestParam(value = "n", defaultValue = "") String newcolumn 
+			) {
+		
+		Map<String,Boolean> map = new HashMap<>();
+		
+		map.put("isValid", false);
+		
+		
+		if(column.trim().length() > 0 && newcolumn.trim().length() > 0 && column.equals("username")){
+		
+			Boolean validUsername = (userService.usernameExists(newcolumn)) ? false : true;
+			map.put("isValid", validUsername);
+			
+		} else if(column.trim().length() > 0 && newcolumn.trim().length() > 0 && column == "email"){
+			
+			System.out.println("i m email");
+			Boolean validEmail = (userService.emailExists(newcolumn)) ? false : true;
+			map.put("isValid", validEmail);
+			
+		}
+		
+		return map;
 		
 	}
 	
