@@ -20,10 +20,10 @@ createUser.controller('postCtrl', function($scope) {
 	
 	
 	
-	$scope.generateSeo = function() {
+	$scope.generateSeo = function(title) {
 		
-		console.log("2");
-        $scope.seo = "dd";
+		//console.log(title);
+        $scope.post.seo = urlTitle(title);
     };
 	
 });

@@ -6,11 +6,14 @@ public class Post {
 	
 	private int id;
 	
-	@Size(min=6, max=200)
+	@Size(min=6, max=150,  message = "Please use between 6 and 150 characters.")
     private String title;
 	
 
 	private String slug;
+	
+	@Size(min=6, max=150,  message = "Please use between 6 and 150 characters.")
+	private String metaDescription;
 	
 
 	private String content;
@@ -27,6 +30,12 @@ public class Post {
 	private String categoryName;
 	
 	
+	public String getMetaDescription() {
+		return metaDescription;
+	}
+	public void setMetaDescription(String metaDescription) {
+		this.metaDescription = metaDescription;
+	}
 	public boolean isVisibility() {
 		return visibility;
 	}
